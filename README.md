@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Features
+- ⚡️ Next.js 13
+- ⚛️ React 18
+- ✨ Styled Components - CssInJs for component styling
+- 📏 ESLint — To find and fix problems in your code
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+## Quick Start
+
+The best way to start with this template is using [Create Next App](https://nextjs.org/docs/api-reference/create-next-app).
+
+```
+# yarn
+yarn create next-app -e https://github.com/yolandariveragarcia/awakeseller-frontend
+# npm
+npx create-next-app -e https://github.com/yolandariveragarcia/awakeseller-frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+To start the project locally, run:
 
-[http://localhost:3000/api/hello](http://localhost:3000/api/hello) is an endpoint that uses [Route Handlers](https://beta.nextjs.org/docs/routing/route-handlers). This endpoint can be edited in `app/api/hello/route.js`.
+```bash
+  npm dev
+  our
+  yarn dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Open `http://localhost:3000` with your browser to see the result.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+### Requirements
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Node.js >= 18.02.0
+- npm our yarn
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Directory Structure
 
-## Deploy on Vercel
+- [`.husky`](.husky) — Husky configuration and hooks.<br>
+- [`public`](./public) — Static assets such as robots.txt, images, and favicon.<br>
+- [`src`](./src) — Application source code, including pages, components, styles.<br>
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Scripts
+- `yarn/npm dev` — Starts the application in development mode at `http://localhost:3000`.
+- `yarn/npm build` — Creates an optimized production build of your application.
+- `yarn/npm start` — Starts the application in production mode.
+- `yarn/npm lint` — Runs ESLint for all files in the `src` directory.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### SSl
+- `npx local-ssl-proxy --source 3001 --target 3000` - Iniciar proxy HTTP SSL para desarrollo en local 
+
+### Path Mapping
+
+```jsx
+import { Button } from '~/presentation/components/Button';
+// To import images or other files from the public folder
+import avatar from '~/public/avatar.png';
+```
+
+
+<a id="license"></a>
+
+## License
+
+[MIT](https://github.com/yolandariveragarcia/awakeseller-frontend/blob/main/LICENSE) © [Yolanda Rivera](https://www.linkedin.com/in/yolandariveragarcia/)
+
