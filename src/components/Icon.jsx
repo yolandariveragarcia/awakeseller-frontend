@@ -4,7 +4,7 @@ export default function Icon () {
     width="40.000000pt" height="40.000000pt" viewBox="0 0 500.000000 500.000000"
     preserveAspectRatio="xMidYMid meet">
    <g transform="translate(0.000000,500.000000) scale(0.100000,-0.100000)"
-   fill="#5b5b5b" stroke="none">
+   fill="#f7f7f7" stroke="none">
    <path d="M140 4500 l0 -70 178 0 178 0 232 -741 c128 -408 231 -743 230 -744
    -2 -1 -64 -39 -140 -83 -130 -78 -137 -84 -152 -127 l-15 -46 107 -274 c132
    -342 115 -325 317 -325 74 0 135 -2 135 -4 0 -2 -7 -20 -15 -39 -34 -81 -11

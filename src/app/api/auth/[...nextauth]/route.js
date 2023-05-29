@@ -1,5 +1,8 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
 
+/**
+ * Proveedor de autenticación para Etsy.
+ */
 const etsyAuthProvider = {
   id: 'etsy',
   name: 'Etsy',
@@ -7,6 +10,12 @@ const etsyAuthProvider = {
   token: 'https://api.etsy.com/v3/public/oauth/token',
   userinfo: {
     url: 'https://openapi.etsy.com/v3/application/users',
+    /**
+     * Método de solicitud de información de usuario.
+     * 
+     * @param {Object} context - Contexto de la solicitud.
+     * @returns {Promise<Object>} - Promesa que resuelve en la información de usuario.
+     */
     async request(context) {
       const response = await context.client.requestResource(
         context.client.issuer.userinfo_endpoint + '/' + context.tokens.access_token.split('.')[0],
@@ -34,6 +43,12 @@ const etsyAuthProvider = {
       scope: 'listings_w shops_r shops_w transactions_r profile_r email_r'
     }
   },
+  /**
+   * Método para formatear el perfil de usuario.
+   * 
+   * @param {Object} profile - Perfil de usuario de Etsy.
+   * @returns {Object} - Perfil formateado.
+   */
   profile(profile) {
     return {
       id: profile.user_id,
@@ -47,10 +62,18 @@ const etsyAuthProvider = {
   }
 }
 
-
+/**
+ * Controlador de NextAuth con el proveedor Etsy.
+ */
 const handler = NextAuth({
   providers: [etsyAuthProvider],
   callbacks: {
+    /**
+     * Callback para manejar el token JWT.
+     * 
+     * @param {Object} params - Parámetros de la callback.
+     * @returns {Promise<Object>} - Promesa que resuelve en el token JWT.
+     */
     async jwt ({ token, user, account, profile, session, trigger }) {
       if (trigger === 'signIn') {
         token.accessToken = account.access_token
@@ -65,6 +88,12 @@ const handler = NextAuth({
       }
       return token
     },
+    /**
+     * Callback para manejar la sesión.
+     * 
+     * @param {Object} params - Parámetros de la callback.
+     * @returns {Promise<Object>} - Promesa que resuelve en la sesión.
+     */
     async session ({ session, user, token, trigger }) {
      if (token) {
         session.user = token.user

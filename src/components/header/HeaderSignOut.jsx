@@ -5,11 +5,10 @@ import Icon from '../Icon'
 
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
 export default function HeaderSignOut () {
   const { data: session, status } = useSession()
-  console.log(session)
   
   if (status === "authenticated") {
     const navigation = [
@@ -29,16 +28,16 @@ export default function HeaderSignOut () {
 
   return ( 
     <>
-    <Disclosure as="nav" className="bg-white">
+    <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 items-center justify-between border-b border-gray-200">
+            <div className="flex h-16 items-center justify-between">
               <div className="flex items-center">
                 <a href='/' className="flex-shrink-0">
                   <Icon />
                 </a>
-                <div className="hidden md:block items-center">
+                <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
                     {navigation.map((item) => (
                       <a
@@ -46,9 +45,9 @@ export default function HeaderSignOut () {
                         href={item.href}
                         className={classNames(
                           item.current
-                            ? 'text-indigo-600 border-indigo-600'
-                            : 'text-gray-400 border-transparent hover:text-indigo-600 hover:border-indigo-600',
-                          'px-3 py-5 text-sm font-medium border-b-2'
+                            ? 'bg-gray-900 text-white'
+                            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                          'rounded-md px-3 py-2 text-sm font-medium'
                         )}
                         aria-current={item.current ? 'page' : undefined}
                       >
@@ -133,11 +132,11 @@ export default function HeaderSignOut () {
             <div className="border-t border-gray-700 pb-3 pt-4">
               <div className="flex items-center px-5">
                 <div className="flex-shrink-0">
-                  {/* <img className="h-10 w-10 rounded-full" src={} alt="" /> */}
+                  <img className="h-10 w-10 rounded-full" src={session.user.image} alt="" />
                 </div>
                 <div className="ml-3">
-                 {/*  <div className="text-base font-medium leading-none text-white">{session.user.name}</div>
-                  <div className="text-sm font-medium leading-none text-gray-400">{session.user.email}</div>*/}
+                 <div className="text-base font-medium leading-none text-white">{session.user.name}</div>
+                 <div className="text-sm font-medium leading-none text-gray-400">{session.user.email}</div>
                 </div>
               </div>
               <div className="mt-3 space-y-1 px-2">

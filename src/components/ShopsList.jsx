@@ -28,83 +28,85 @@ export const ShopsList = () => {
   const lastIndex = currentPage * resultsPerPage
   const firstIndex = lastIndex - resultsPerPage
 
-/**
- * Maneja la búsqueda de tiendas.
- */
-  const handleSearch = async () => {
-  
-    if (session && session.accessToken) {
- 
-      try {
-        const res = await fetch(`http://localhost:8080/shops?name=${searchQuery}`,{
-          method: 'GET',
-          mode: 'cors',
-          headers: {
-            'access-control-allow-origin': '*',
-            Authorization: `Bearer ${session.accessToken}`
-          }
-        })
-      if (res.ok) {
-          const shops = await res.json()
-          setShops(shops)
-        } else {
-          console.log('Error al obtener los datos de la API')
-        }
-      } catch (error) {
-        console.log('Error en la llamada a la API:', error)
-      }
-   }
-  }
+  useEffect(() => {
 
-useEffect(() => {
-    handleSearch();
-  }, [session]);
+    const fetchShops = async () => {
+    
+      if (session && session.accessToken) {
+  
+        try {
+          const res = await fetch(`http://localhost:8080/shops?name=${searchQuery}`,{
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+              'access-control-allow-origin': '*',
+              Authorization: `Bearer ${session.accessToken}`
+            }
+          })
+
+           if (res.ok) {
+            const shops = await res.json()
+            console.log(res)
+            setShops(shops)
+            setSearchResults(shops)
+
+          } else {
+            console.log('Error al obtener los datos de la API')
+          }
+        } catch (error) {
+          console.log('Error en la llamada a la API:', error)
+      }
+    }
+  }
+  
+    fetchShops()
+  }, [session, searchQuery])
 
   /**
    * Filtra las tiendas según la búsqueda.
    * @param {string} query - Consulta
    */
   const filterShops = (query) => {
-    setSearchQuery(query)
+    const filteredShops = shops.filter((shop) =>
+      shop.shopName.toLowerCase().includes(query.toLowerCase())
+    )
+    setSearchQuery(query);
+    setSearchResults(filteredShops)
   }
-
-  const filteredShops = shops.filter((shop) =>
-  shop.shopName && shop.shopName.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-
-  useEffect(() => {
-    setSearchResults(filteredShops);
-  }, [searchQuery, shops]);
 
   return (
     <section className='container px-4 mx-auto'>
+      <div className='flex flex-col mt-6'>
+        <div className='inline-block min-w-full py-2 align-middle md:px-6 lg:px-8'>
       <SearchBar onSearch={filterShops} />
       {searchQuery && searchResults.length > 0
         ? (
-          <div className='container grid grid-cols-1 mx-auto overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg'>
-            <table className='table-auto border-collapse border border-slate-40'>
-              <thead>
-                <tr>
-                  <th className='border border-slate-300'> Tienda </th>
-                  <th className='border border-slate-300'> Nº de Ventas Totales </th>
-                  <th className='border border-slate-300'> Nº de Likes </th>
-                  <th className='border border-slate-300'> Nº de Reseñas </th>
-                </tr>
-              </thead>
-              <tbody>
-                {searchResults.map((shop) => (
-                  <tr key={shop.id} className='md:mx-auto divide-y divide-gray-100 px-4 py-6'>
-                    <td className='border border-slate-300'> {shop.shopName} </td>
-                    <td className='border border-slate-300'> {shop.shoptransactionSoldCount} </td>
-                    <td className='border border-slate-300'> {shop.shopNumFavorers} </td>
-                    <td className='border border-slate-300'> {shop.reviewCount} </td>
-                  </tr>
-                )).slice(firstIndex, lastIndex)}
-              </tbody>
-            </table>
-          </div>
+            <div className='mt-6 container grid grid-cols-1 mx-auto overflow-hidden border border-gray-200 md:rounded-lg'>
+                <table className='min-w-full divide-y divide-gray-200'>
+                  <thead className='bg-gray-50'>
+                    <tr>
+                      <th scope='col' className='py-3.5 px-4 text-sm font-normal text-left text-gray-500'> Tienda </th>
+                      <th scope='col' className='py-3.5 px-4 text-sm font-normal text-left text-gray-500'> Nº de Ventas Totales </th>
+                      <th scope='col' className='py-3.5 px-4 text-sm font-normal text-left text-gray-500'> Nº de Likes </th>
+                      <th scope='col' className='py-3.5 px-4 text-sm font-normal text-left text-gray-500'> Nº de Reseñas </th>
+                    </tr>
+                  </thead>
+                  <tbody className='bg-white divide-y divide-gray-200'>
+                    {searchResults.map((shop) => (
+                      <tr key={shop.id} className='md:mx-auto divide-y divide-gray-100 px-4 py-6'>
+                        <td> {shop.shopName} </td>
+                        <td> {shop.transactionSoldCount} </td>
+                        <td> {shop.numFavorers} </td>
+                        <td> {shop.reviewCount} </td>
+                      </tr>
+                    )).slice(firstIndex, lastIndex)}
+                  </tbody>
+                </table>
+              </div>
             )
             : null}
+            </div>
+          </div>
       {searchResults.length === 0 && <p>No se encontraron resultados</p>}
       <div className='container grid grid-cols-1 mx-auto'>
           <Pagination

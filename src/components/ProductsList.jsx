@@ -13,7 +13,7 @@ import { Pagination } from './Pagination'
  * Componente ProductList
  */
 export const ProductList = () => {
-  const {data: session} = useSession()
+  const {data: session, status} = useSession()
 
   const [products, setProducts] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
@@ -25,51 +25,55 @@ export const ProductList = () => {
   const [currentPage, setCurrentPage] = useState(1)
 
   const lastIndex = currentPage * resultsPerPage
-  const firstIndex = lastIndex - resultsPerPage
+  const firstIndex = lastIndex - 
+  
+  
+  useEffect(() => {
+  
+    /**
+     * Realiza una llamada a la API para obtener los productos.
+     * Solo se realiza la llamada si hay una sesión activa y se ha proporcionado un token de acceso.
+     */
+    const fetchProduct = async () => {
+      if (session && session.accessToken) {
+  
+        const PRODUCTS_BACKEND_ENDPOINT = `http://localhost:8080/products?keywords=${searchQuery}`
 
-  /**
-   * Realiza una llamada a la API para obtener los productos.
-   * Solo se realiza la llamada si hay una sesión activa y se ha proporcionado un token de acceso.
-   */
-  const fetchProduct = async () => {
-    if (session && session.accessToken) {
-      console.log(session.accessToken)
-
-      const PRODUCTS_BACKEND_ENDPOINT = `http://localhost:8080/products/?name=${searchQuery}`
-
-      const options = {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-          'access-control-allow-origin': '*',
-          Authorization: `Bearer ${session.accessToken}`
+        const options = {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            'access-control-allow-origin': '*',
+            Authorization: `Bearer ${session.accessToken}`
+          }
         }
-      }
 
-      try {
-        const res = await fetch(PRODUCTS_BACKEND_ENDPOINT, options)
-      if (res.ok) {
-        const products = await res.json()
-        console.log(products)
+        try {
 
-        setProducts(products)
-        setSearchResults(products)
-      } else {
-        console.log('Error al obtener los datos de la API')
+          const res = await fetch(PRODUCTS_BACKEND_ENDPOINT, options)
+
+          if (res.ok) {
+            const products = await res.json()
+
+            setProducts(products)
+            setSearchResults(products)
+          
+          } else {
+            console.log('Error al obtener los datos de la API')
+          }
+      } catch (error) {
+        console.log('Error en la llamada a la API:', error)
       }
-    } catch (error) {
-      console.log('Error en la llamada a la API:', error)
     }
-  }}
+  }
+
+    fetchProduct()
+}, [session, searchQuery])
 
   /**
    * Filtra los productos según la consulta de búsqueda.
    * @param {string} query - Consulta de búsqueda.
    */
-  useEffect(() => {
-    fetchProduct()
-  }, [])
-
   const filterProducts = (query) => {
     const filteredProducts = products.filter((product) =>
       product.title.toLowerCase().includes(query.toLowerCase())
@@ -83,7 +87,7 @@ export const ProductList = () => {
       <SearchBar onSearch={filterProducts} />
       {searchQuery && searchResults.length > 0
         ? (
-          <div>
+          <div className='mt-10'>
             <table className='table-auto border-collapse border border-slate-40'>
               <thead>
                 <tr>
@@ -99,7 +103,7 @@ export const ProductList = () => {
                     <td className='border border-slate-300'> {product.title} </td>
                     <td className='border border-slate-300'> {product.description} </td>
                     <td className='border border-slate-300'> {product.quantity} </td>
-                    <td className='border border-slate-300'> {product.shopName} </td>
+                    <td className='border border-slate-300'> {product.shopId} </td>
                   </tr>
                 )).slice(firstIndex, lastIndex)}
               </tbody>

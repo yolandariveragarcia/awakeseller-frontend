@@ -4,19 +4,26 @@
  */
 'use client'
 import { useSession } from 'next-auth/react'
-import { useState, useEffect, useRef } from 'react'
-
+import { useState, useEffect } from 'react'
 import { Pagination } from './Pagination'
+
 
 /**
  * Componente TransactionList.
  */
 export const TransactionList = () => {
+
+  const transactions = [{
+    title: 'Producto 1',
+    description: 'Producto número 1',
+    price: 7.90,
+    currency: '€'
+  }] 
+
+
   const {data:session} = useSession()
 
-  const tableRef = useRef(null)
-
-  const [transactions, setTransactions] = useState([])
+  // const [transactions, setTransactions] = useState([])
 
   const totalResults = transactions.length
 
@@ -26,14 +33,11 @@ export const TransactionList = () => {
   const lastIndex = currentPage * resultsPerPage
   const firstIndex = lastIndex - resultsPerPage
 
-  const TRANSACTIONS_BACKEND_ENDPOINT = `http://localhost:8080/transactions`
-
-  /**
-   * Recupera las transacciones de la API.
-   */
-  const fetchTransaction = async () => {
+  /*
+  useEffect(() => {
+    const TRANSACTIONS_BACKEND_ENDPOINT = `http://localhost:8080/transactions`
+    const fetchTransaction = async () => {
     if (session && session.accessToken) {
-      console.log(session.accessToken)
       
     const options = {
       method: 'GET',
@@ -48,25 +52,26 @@ export const TransactionList = () => {
     setTransactions(transactions)
   }}
 
-  useEffect(() => {
     fetchTransaction()
   }, [])
+
+  */
 
   return (
     <section className='container px-4 mx-auto'>
       <div className='flex flex-col mt-6'>
         <div className='inline-block min-w-full py-2 align-middle md:px-6 lg:px-8'>
-          <div className='container grid grid-cols-1 mx-auto overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg'>
-            <table className='min-w-full divide-y divide-gray-200 dark:divide-gray-700' ref={tableRef}>
-              <thead className='bg-gray-50 dark:bg-gray-800'>
+          <div className='container grid grid-cols-1 mx-auto overflow-hidden border border-gray-200 md:rounded-lg'>
+            <table className='min-w-full divide-y divide-gray-200'>
+              <thead className='bg-gray-50'>
                 <tr>
-                  <th scope='col' className='py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400'>Producto</th>
-                  <th scope='col' className='py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400'>Descripción</th>
-                  <th scope='col' className='py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400'>Importe</th>
-                  <th scope='col' className='py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400'>Moneda</th>
+                  <th scope='col' className='py-3.5 px-4 text-sm font-normal text-left text-gray-500'>Producto</th>
+                  <th scope='col' className='py-3.5 px-4 text-sm font-normal text-left text-gray-500'>Descripción</th>
+                  <th scope='col' className='py-3.5 px-4 text-sm font-normal text-left text-gray-500'>Importe</th>
+                  <th scope='col' className='py-3.5 px-4 text-sm font-normal text-left text-gray-500'>Moneda</th>
                 </tr>
               </thead>
-              <tbody className='bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900'>
+              <tbody className='bg-white divide-y divide-gray-200'>
                 {transactions.map(transaction => (
                   <tr key={transaction.id} className='md:mx-auto divide-y divide-gray-100 px-4 py-6'>
                     <td>
